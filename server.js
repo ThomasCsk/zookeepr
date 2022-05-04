@@ -1,32 +1,15 @@
-const express = require('express');
 const fs = require('fs');
 const path = require('path');
-
+const express = require('express');
 const { animals } = require('./data/animals');
+
+const PORT = process.env.PORT || 3001;
 
 const app = express();
 // parse incoming string or array data
 app.use(express.urlencoded({ extended: true }));
 // parse incoming JSON data
 app.use(express.json());
-
-const PORT = process.env.PORT || 3001;
-
-function validateAnimal(animal) {
-  if (!animal.name || typeof animal.name !== 'string') {
-    return false;
-  }
-  if (!animal.species || typeof animal.species !== 'string') {
-    return false;
-  }
-  if (!animal.diet || typeof animal.diet !== 'string') {
-    return false;
-  }
-  if (!animal.personalityTraits || !Array.isArray(animal.personalityTraits)) {
-    return false;
-  }
-  return true;
-}
 
 function filterByQuery(query, animalsArray) {
   let personalityTraitsArray = [];
@@ -80,6 +63,22 @@ function createNewAnimal(body, animalsArray) {
     JSON.stringify({ animals: animalsArray }, null, 2)
   );
   return animal;
+}
+
+function validateAnimal(animal) {
+  if (!animal.name || typeof animal.name !== 'string') {
+    return false;
+  }
+  if (!animal.species || typeof animal.species !== 'string') {
+    return false;
+  }
+  if (!animal.diet || typeof animal.diet !== 'string') {
+    return false;
+  }
+  if (!animal.personalityTraits || !Array.isArray(animal.personalityTraits)) {
+    return false;
+  }
+  return true;
 }
 
 app.get('/api/animals', (req, res) => {
